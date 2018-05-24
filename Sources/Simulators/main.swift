@@ -42,7 +42,7 @@ if beforeClean {
 }
 
 let buildResult = Xcodebuild.build(withProject: project, orWorkspace: workspace, andScheme: scheme)
-let codeSigningFilderPath = Xcodebuild.codeSigningFilderPath(for: buildResult)
+let codeSigningFolderPath = Xcodebuild.codeSigningFolderPath(for: buildResult)
 let bundleIdentifier = arguments["bundleIdentifier"] ?? Xcodebuild.buildIdentifier(for: buildResult)
 
 let findDevices = Simulators.findDevice(for: osType, withOSVersion: osVersion, andDevices: devices)
@@ -54,8 +54,8 @@ guard 0 < findDevices.count else {
 
 func process(with device: Simulators.Device) {
     if Simulators.isBooted(udid: device.udid) {
-        print("install \(codeSigningFilderPath) to \(device.udid)")
-        Simulators.install(to: device, with: codeSigningFilderPath)
+        print("install \(codeSigningFolderPath) to \(device.udid)")
+        Simulators.install(to: device, with: codeSigningFolderPath)
         print("launch \(bundleIdentifier) to \(device.udid)")
         Simulators.launch(on: device, with: bundleIdentifier)
     } else {

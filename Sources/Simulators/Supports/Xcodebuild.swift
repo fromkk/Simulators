@@ -51,7 +51,7 @@ class Xcodebuild {
         return buildResult
     }
     
-    static func codeSigningFilderPath(for buildResult: String) -> String {
+    static func codeSigningFolderPath(for buildResult: String) -> String {
         let paths = buildResult.regexStrings(with: "export CODESIGNING_FOLDER_PATH=(.*?\\.app)\n")
         guard let first = paths.first else {
             print("CODESIGNING_FOLDER_PATH get failed")
