@@ -1,5 +1,7 @@
 # Simulators
 
+![simulators](./simulators.png)
+
 build and launch multi iOS simulators
 
 ## Install
