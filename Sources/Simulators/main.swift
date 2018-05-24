@@ -2,7 +2,7 @@ import Cocoa
 
 func showHelp() {
     let help: String = """
-    Usage: simulators [--project <project>] | [--workspace <workspace>] --scheme <scheme> --bundleIdentifier <bundleIdentifier> --beforeClean <beforeClean> --devices <devices> --osVersion <osVersion> --osType <osType>
+    Usage: simulators [--project <project>] | [--workspace <workspace>] --scheme <scheme> --bundleIdentifier <bundleIdentifier> --beforeClean <beforeClean> --devices <devices> --osVersion <osVersion>
     
     Options:
     --project          set XXX.xcodeproj path
