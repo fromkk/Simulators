@@ -47,8 +47,8 @@ let bundleIdentifier = arguments["bundleIdentifier"] ?? Xcodebuild.buildIdentifi
 
 let findDevices = Simulators.findDevice(for: osType, withOSVersion: osVersion, andDevices: devices)
 guard 0 < findDevices.count else {
+    print("devices not found")
     showHelp()
-    print("findDevices not found")
     exit(1)
 }
 
