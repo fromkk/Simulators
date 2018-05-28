@@ -15,7 +15,7 @@ make install
 ## Usage
 
 ```bash
-simulators [--project <project>] | [--workspace <workspace>] --scheme <scheme> --bundleIdentifier <bundleIdentifier> --beforeClean <beforeClean> --devices <devices> --osVersion <osVersion>
+simulators [--project <project>] | [--workspace <workspace>] --scheme <scheme> --bundleIdentifier <bundleIdentifier> --beforeClean <beforeClean> --devices <devices> --osVersion <osVersion> --showBuildLog <showBuildLog>
 ```
 
 ## Options
@@ -29,3 +29,4 @@ bundleIdentifier | set bundleIdentifier
 beforeClean | set if clean before build [true,false]
 devices | set devices [iPhone SE,iPhone 7,iPhone 7 Plus,iPhone X,etc...]
 osVersion |  set OS versions [10.3,11.3,etc...]
+showBuildLog | set if show build log [true|false]

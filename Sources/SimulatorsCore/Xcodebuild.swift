@@ -7,12 +7,12 @@
 
 import Foundation
 
-class Xcodebuild {
-    static func clean() {
+public class Xcodebuild {
+    public static func clean() {
         Command.run("xcodebuild", arguments: ["clean"])
     }
     
-    static func build(withProject project: String?, orWorkspace workspace: String?, andScheme scheme: String) -> String {
+    public static func build(withProject project: String?, orWorkspace workspace: String?, andScheme scheme: String) -> String {
         let result: String?
         if let project = project {
             result = Command.run("xcodebuild", arguments: [
@@ -51,33 +51,31 @@ class Xcodebuild {
         return buildResult
     }
     
-    static func codeSigningFolderPath(for buildResult: String) -> String {
-        let paths = buildResult.regexStrings(with: "export CODESIGNING_FOLDER_PATH=(.*?\\.app)\n")
-        guard let first = paths.first else {
-            print("CODESIGNING_FOLDER_PATH get failed")
-            exit(1)
-        }
-        
-        guard first.indices.contains(1) else {
-            print("CODESIGNING_FOLDER_PATH get failed")
-            exit(1)
-        }
-        
+    private static func findResult(from regexMatched: [[String]]) -> String? {
+        guard let first = regexMatched.first else { return nil }
+        guard first.indices.contains(1) else { return nil }
         return first[1]
     }
     
-    static func buildIdentifier(for buildResult: String) -> String {
-        let paths = buildResult.regexStrings(with: "export PRODUCT_BUNDLE_IDENTIFIER=(.*?)\n")
-        guard let first = paths.first else {
+    public static func codeSigningFolderPath(for buildResult: String) -> String {
+        if let path = findResult(from: buildResult.regexStrings(with: "/usr/bin/codesign.+--timestamp=none (.*?\\.app)\n")) {
+            return path
+        } else if let path = findResult(from: buildResult.regexStrings(with: "export CODESIGNING_FOLDER_PATH=(.*?\\.app)\n")) {
+            return path
+        } else {
+            print("CODESIGNING_FOLDER_PATH get failed")
+            exit(1)
+        }
+    }
+    
+    public static func bundleIdentifier(for buildResult: String) -> String {
+        if let bundleIdentifier = findResult(from: buildResult.regexStrings(with: "export PRODUCT_BUNDLE_IDENTIFIER=(.*?)\n")) {
+            return bundleIdentifier
+        } else if let bundleIdentifier = findResult(from: buildResult.regexStrings(with: "\"application-identifier\" = \"[A-Z0-9]+\\.(.+)\";")) {
+            return bundleIdentifier
+        } else {
             print("PRODUCT_BUNDLE_IDENTIFIER get failed")
             exit(1)
         }
-        
-        guard first.indices.contains(1) else {
-            print("PRODUCT_BUNDLE_IDENTIFIER get failed")
-            exit(1)
-        }
-        
-        return first[1]
     }
 }

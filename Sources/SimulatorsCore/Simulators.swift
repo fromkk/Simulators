@@ -7,13 +7,18 @@
 
 import Foundation
 
-class Simulators {
-    struct Device {
-        let name: String
-        let udid: String
+public class Simulators {
+    public struct Device {
+        public let name: String
+        public let udid: String
+        
+        public init(name: String, udid: String) {
+            self.name = name
+            self.udid = udid
+        }
     }
     
-    static func findDevice(for osType: String, withOSVersion osVersion: [String], andDevices devices: [String]) -> [Device] {
+    public static func findDevice(for osType: String, withOSVersion osVersion: [String], andDevices devices: [String]) -> [Device] {
         guard let json = Command.run("xcrun", arguments: ["simctl", "list", "--json"]), let data = json.data(using: .utf8) else {
             print("xcrun simctl list --json get failed")
             exit(1)
@@ -41,7 +46,7 @@ class Simulators {
         }
     }
     
-    static func isBooted(udid: String) -> Bool {
+    public static func isBooted(udid: String) -> Bool {
         let booted = Command.run("xcrun", arguments: [
             "simctl",
             "list"
@@ -51,7 +56,7 @@ class Simulators {
         return 0 < booted.count
     }
     
-    static func boot(_ device: Device) {
+    public static func boot(_ device: Device) {
         Command.run("xcrun", arguments: [
             "simctl",
             "boot",
@@ -59,7 +64,7 @@ class Simulators {
             ])
     }
     
-    static func install(to device: Device, with appPath: String) {
+    public static func install(to device: Device, with appPath: String) {
         Command.run("xcrun", arguments: [
             "simctl",
             "install",
@@ -68,7 +73,7 @@ class Simulators {
             ])
     }
     
-    static func launch(on device: Device, with bundleIdentifier: String) {
+    public static func launch(on device: Device, with bundleIdentifier: String) {
         Command.run("xcrun", arguments: [
             "simctl",
             "launch",
