@@ -599,13 +599,13 @@ final class SimulatorsTest: XCTestCase {
         "udid" : "3FEF14D2-4BB4-4759-AB28-A62B97B96140"
       },
       {
-        "state" : "Shutdown",
+        "state" : "Booted",
         "availability" : "(available)",
         "name" : "iPhone SE",
         "udid" : "84E94F45-7565-48CB-A2CB-8B8B2025E429"
       },
       {
-        "state" : "Shutdown",
+        "state" : "Booted",
         "availability" : "(available)",
         "name" : "iPhone X",
         "udid" : "44EE068E-D87A-4C65-96E4-2199E3C7A9AA"
@@ -1238,16 +1238,16 @@ final class SimulatorsTest: XCTestCase {
     func testDevices_iOS11_2() {
         let devices = Simulators.devices(withOS: "iOS", andVersion: "11.0", from: jsonDictioary, andTarget: ["iPhone 7", "iPhone 7 Plus"])
         XCTAssertEqual(devices, [
-            Simulators.Device(name: "iPhone 7", udid: "A8681872-CF83-47A0-800B-B348691CFE59"),
-            Simulators.Device(name: "iPhone 7 Plus", udid: "B62C34C5-A9C0-4400-A190-89A01A792BEC"),
+            Simulators.Device(name: "iPhone 7", udid: "A8681872-CF83-47A0-800B-B348691CFE59", availability: [Simulators.Device.Availability.unavailable, Simulators.Device.Availability.runtimeProfileNotFound], state: Simulators.Device.State.shutdown),
+            Simulators.Device(name: "iPhone 7 Plus", udid: "B62C34C5-A9C0-4400-A190-89A01A792BEC", availability: [Simulators.Device.Availability.unavailable, Simulators.Device.Availability.runtimeProfileNotFound], state: Simulators.Device.State.shutdown),
             ])
     }
     
     func testDevices_iOS11_3() {
         let devices = Simulators.devices(withOS: "iOS", andVersion: "11.3", from: jsonDictioary, andTarget: ["iPhone SE", "iPhone X"])
         XCTAssertEqual(devices, [
-            Simulators.Device(name: "iPhone SE", udid: "84E94F45-7565-48CB-A2CB-8B8B2025E429"),
-            Simulators.Device(name: "iPhone X", udid: "44EE068E-D87A-4C65-96E4-2199E3C7A9AA"),
+            Simulators.Device(name: "iPhone SE", udid: "84E94F45-7565-48CB-A2CB-8B8B2025E429", availability: [Simulators.Device.Availability.available], state: Simulators.Device.State.booted),
+            Simulators.Device(name: "iPhone X", udid: "44EE068E-D87A-4C65-96E4-2199E3C7A9AA", availability: [Simulators.Device.Availability.available], state: Simulators.Device.State.booted),
             ])
     }
 }

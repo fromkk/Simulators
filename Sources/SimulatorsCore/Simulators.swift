@@ -9,12 +9,27 @@ import Foundation
 
 public class Simulators {
     public struct Device: Equatable {
+        public enum Availability: String {
+            case available
+            case unavailable
+            case runtimeProfileNotFound = "runtime profile not found"
+        }
+        
+        public enum State: String {
+            case booted = "Booted"
+            case shutdown = "Shutdown"
+        }
+        
         public let name: String
         public let udid: String
+        public let availability: [Availability]
+        public let state: State
         
-        public init(name: String, udid: String) {
+        public init(name: String, udid: String, availability: [Availability], state: State) {
             self.name = name
             self.udid = udid
+            self.availability = availability
+            self.state = state
         }
     }
     
@@ -48,9 +63,14 @@ public class Simulators {
             guard let targetDevicces = deviceList[key] as? [[String: String]] else { return }
             
             targetDevicces.forEach({ (currentDevice) in
-                guard let name = currentDevice["name"], let udid = currentDevice["udid"] else { return }
+                guard let name = currentDevice["name"], let udid = currentDevice["udid"], let availabilityString = currentDevice["availability"], let stateString = currentDevice["state"], let state = Device.State(rawValue: stateString) else { return }
                 if devices.contains(name) {
-                    let device = Device(name: name, udid: udid)
+                    let availabilities = availabilityString.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").components(separatedBy: ",")
+                    let availavility: [Device.Availability] = availabilities.compactMap { current in
+                        return Device.Availability(rawValue: current.trimmingCharacters(in: .whitespacesAndNewlines))
+                    }
+                    
+                    let device = Device(name: name, udid: udid, availability: availavility, state: state)
                     result.append(device)
                 }
             })
