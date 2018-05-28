@@ -8,7 +8,7 @@
 import Foundation
 
 public class Simulators {
-    public struct Device {
+    public struct Device: Equatable {
         public let name: String
         public let udid: String
         
@@ -30,11 +30,22 @@ public class Simulators {
         }
         
         return osVersion.reduce(into: []) { (result, currentOS) in
-            guard let deviceList = jsonDictionary["devices"] as? [String: Any] else { return }
-            
-            let osString = String(format: "%@ %@", osType, currentOS)
-            
-            guard let targetDevicces = deviceList[osString] as? [[String: String]] else { return }
+            result += self.devices(withOS: osType, andVersion: currentOS, from: jsonDictionary, andTarget: devices)
+        }
+    }
+    
+    public static func devices(withOS osType: String, andVersion version: String, from jsonDictionary: [String: Any], andTarget devices: [String]) -> [Device] {
+        guard let deviceList = jsonDictionary["devices"] as? [String: Any] else { return [] }
+        
+        var result: [Device] = []
+        
+        let keys: [String] = [
+            String(format: "%@ %@", osType, version),
+            String(format: "com.apple.CoreSimulator.SimRuntime.%@-%@", osType, version.replacingOccurrences(of: ".", with: "-"))
+        ]
+        
+        keys.forEach { (key) in
+            guard let targetDevicces = deviceList[key] as? [[String: String]] else { return }
             
             targetDevicces.forEach({ (currentDevice) in
                 guard let name = currentDevice["name"], let udid = currentDevice["udid"] else { return }
@@ -44,6 +55,8 @@ public class Simulators {
                 }
             })
         }
+        
+        return result
     }
     
     public static func isBooted(udid: String) -> Bool {
