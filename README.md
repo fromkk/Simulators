@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/fromkk/Simulators.svg?branch=master)](https://travis-ci.org/fromkk/Simulators)
+
 # Simulators
 
 ![simulators](./simulators.png)
