@@ -60,10 +60,13 @@ public class Simulators {
         ]
         
         keys.forEach { (key) in
-            guard let targetDevicces = deviceList[key] as? [[String: String]] else { return }
+            guard let targetDevices = deviceList[key] as? [[String: Any]] else {
+                debugPrint("targetDevices not found")
+                return
+            }
             
-            targetDevicces.forEach({ (currentDevice) in
-                guard let name = currentDevice["name"], let udid = currentDevice["udid"], let availabilityString = currentDevice["availability"], let stateString = currentDevice["state"], let state = Device.State(rawValue: stateString) else { return }
+            targetDevices.forEach({ (currentDevice) in
+                guard let name = currentDevice["name"] as? String, let udid = currentDevice["udid"] as? String, let availabilityString = currentDevice["availability"] as? String, let stateString = currentDevice["state"] as? String, let state = Device.State(rawValue: stateString) else { return }
                 if devices.contains(name) {
                     let availabilities = availabilityString.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").components(separatedBy: ",")
                     let availavility: [Device.Availability] = availabilities.compactMap { current in

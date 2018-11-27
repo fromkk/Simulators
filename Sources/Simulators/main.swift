@@ -30,7 +30,7 @@ let workspace = arguments["workspace"]
 
 let beforeClean = (arguments["beforeClean"] ?? "false") == "true"
 let devices: [String] = (arguments["devices"] ?? "iPhone SE,iPhone 7,iPhone 7 Plus,iPhone X").components(separatedBy: ",")
-let osVersion: [String] = (arguments["osVersion"] ?? "10.3,11.3").components(separatedBy: ",")
+let osVersion: [String] = (arguments["osVersion"] ?? "11.4,12.0").components(separatedBy: ",")
 let osType: String = "iOS"
 let showBuildLog = (arguments["showBuildLog"] ?? "false") == "true"
 
