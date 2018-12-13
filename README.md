@@ -17,7 +17,7 @@ make install
 ## Usage
 
 ```bash
-simulators [--project <project>] | [--workspace <workspace>] --scheme <scheme> --bundleIdentifier <bundleIdentifier> --beforeClean <beforeClean> --devices <devices> --osVersion <osVersion> --showBuildLog <showBuildLog>
+simulators [--project <project>] | [--workspace <workspace>] --scheme <scheme> --bundleIdentifier <bundleIdentifier> --beforeClean <beforeClean> --devices <devices> --osVersion <osVersion> --showBuildLog <showBuildLog> --language <language> --locale <locale>
 ```
 
 ## Options
