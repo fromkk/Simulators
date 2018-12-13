@@ -109,12 +109,21 @@ public class Simulators {
             ])
     }
     
-    public static func launch(on device: Device, with bundleIdentifier: String) {
-        Command.run("xcrun", arguments: [
+    public static func launch(on device: Device, with bundleIdentifier: String, language: String?, locale: String?) {
+        var arguments: [String] = [
             "simctl",
             "launch",
             device.udid,
             bundleIdentifier
-            ])
+        ]
+        if let language = language {
+            arguments.append(contentsOf: ["-AppleLanguages", "(\(language))"])
+        }
+        
+        if let locale = locale {
+            arguments.append(contentsOf: ["-AppleLocale", locale])
+        }
+        debugPrint(#function, "arguments", arguments)
+        Command.run("xcrun", arguments: arguments)
     }
 }

@@ -14,6 +14,8 @@ func showHelp() {
     --devices          set devices [iPhone SE,iPhone 7,iPhone 7 Plus,iPhone X,etc...]
     --osVersion        set OS versions [10.3,11.3,etc...]
     --showBuildLog     set if show build log [true|false]
+    --language         set device language (e.g. ja_JP)
+    --locale           set device region (e.g. ja_JP)
     """
     print(help)
 }
@@ -30,9 +32,12 @@ let workspace = arguments["workspace"]
 
 let beforeClean = (arguments["beforeClean"] ?? "false") == "true"
 let devices: [String] = (arguments["devices"] ?? "iPhone SE,iPhone 7,iPhone 7 Plus,iPhone X").components(separatedBy: ",")
-let osVersion: [String] = (arguments["osVersion"] ?? "11.4,12.0").components(separatedBy: ",")
+let osVersion: [String] = (arguments["osVersion"] ?? "11.4,12.1").components(separatedBy: ",")
 let osType: String = "iOS"
 let showBuildLog = (arguments["showBuildLog"] ?? "false") == "true"
+
+let language: String? = arguments["language"]
+let locale: String? = arguments["locale"]
 
 guard let scheme = arguments["scheme"] else {
     print("scheme not founnd")
@@ -70,7 +75,7 @@ func process(with device: Simulators.Device) {
         print("install \(codeSigningFolderPath) to \(device.udid)")
         Simulators.install(to: device, with: codeSigningFolderPath)
         print("launch \(bundleIdentifier) to \(device.udid)")
-        Simulators.launch(on: device, with: bundleIdentifier)
+        Simulators.launch(on: device, with: bundleIdentifier, language: language, locale: locale)
     } else {
         Command.run("open", arguments: [
             "-a",
