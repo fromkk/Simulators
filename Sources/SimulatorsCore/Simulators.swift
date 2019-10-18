@@ -9,12 +9,6 @@ import Foundation
 
 public class Simulators {
     public struct Device: Equatable {
-        public enum Availability: String {
-            case available
-            case unavailable
-            case runtimeProfileNotFound = "runtime profile not found"
-        }
-        
         public enum State: String {
             case booted = "Booted"
             case shutdown = "Shutdown"
@@ -22,13 +16,11 @@ public class Simulators {
         
         public let name: String
         public let udid: String
-        public let availability: [Availability]
         public let state: State
         
-        public init(name: String, udid: String, availability: [Availability], state: State) {
+        public init(name: String, udid: String, state: State) {
             self.name = name
             self.udid = udid
-            self.availability = availability
             self.state = state
         }
     }
@@ -60,20 +52,16 @@ public class Simulators {
         ]
         
         keys.forEach { (key) in
+            print("key", key)
             guard let targetDevices = deviceList[key] as? [[String: Any]] else {
-                debugPrint("targetDevices not found")
+                debugPrint("targetDevices not found: \(key)")
                 return
             }
             
             targetDevices.forEach({ (currentDevice) in
-                guard let name = currentDevice["name"] as? String, let udid = currentDevice["udid"] as? String, let availabilityString = currentDevice["availability"] as? String, let stateString = currentDevice["state"] as? String, let state = Device.State(rawValue: stateString) else { return }
+                guard let name = currentDevice["name"] as? String, let udid = currentDevice["udid"] as? String, let stateString = currentDevice["state"] as? String, let state = Device.State(rawValue: stateString) else { return }
                 if devices.contains(name) {
-                    let availabilities = availabilityString.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").components(separatedBy: ",")
-                    let availavility: [Device.Availability] = availabilities.compactMap { current in
-                        return Device.Availability(rawValue: current.trimmingCharacters(in: .whitespacesAndNewlines))
-                    }
-                    
-                    let device = Device(name: name, udid: udid, availability: availavility, state: state)
+                    let device = Device(name: name, udid: udid, state: state)
                     result.append(device)
                 }
             })

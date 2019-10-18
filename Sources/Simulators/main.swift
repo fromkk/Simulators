@@ -59,12 +59,9 @@ let codeSigningFolderPath = Xcodebuild.codeSigningFolderPath(for: buildLog)
 let bundleIdentifier = arguments["bundleIdentifier"] ?? Xcodebuild.bundleIdentifier(for: buildLog)
 
 let findDevices = Simulators.findDevice(for: osType, withOSVersion: osVersion, andDevices: devices)
+print(findDevices)
 
-let availableDevices = findDevices.filter { device in
-    return device.availability.contains(Simulators.Device.Availability.available)
-}
-
-guard 0 < availableDevices.count else {
+guard 0 < findDevices.count else {
     print("devices not found")
     showHelp()
     exit(1)
@@ -93,7 +90,7 @@ func process(with device: Simulators.Device) {
     }
 }
 
-availableDevices.forEach { (device) in
+findDevices.forEach { (device) in
     process(with: device)
 }
 
